@@ -1,10 +1,10 @@
 const jwt = require("jsonwebtoken");
-const { UnauthenticatedError } = require("../errors/index");
+
 const auth = async (req, res) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    throw new UnauthenticatedError("Authentication Invalid");
+    return res.status(401).json({ msg: "Authentication Invalid" });
   }
   const token = authHeader.split(" ")[1];
   try {
@@ -12,7 +12,7 @@ const auth = async (req, res) => {
     req.user = { userId: payload.userId, name: payload.name };
     next();
   } catch (err) {
-    throw new UnauthenticatedError("Authentication Invalid");
+    return res.status(401).json({ msg: "Authentication Invalid" });
   }
 };
 

@@ -1,7 +1,4 @@
 const errorHandlerMiddleware = (err, req, res) => {
-  if (err) {
-    res.json(err);
-  }
   let CustomError = {
     statusCode: err.statusCode || 500,
     msg: err.message || "Something went wrong try again later",

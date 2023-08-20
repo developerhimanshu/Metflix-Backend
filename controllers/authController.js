@@ -1,7 +1,6 @@
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { BadRequestError, UnauthenticatedError } = require("../errors");
 
 const register = async (req, res) => {
   const nuser = req.body;
