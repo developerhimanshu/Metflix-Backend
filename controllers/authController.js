@@ -1,6 +1,7 @@
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { BadRequestError, UnauthenticatedError } = require("../errors");
 
 const register = async (req, res) => {
   const nuser = req.body;
@@ -23,12 +24,17 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
   const nuser = req.body;
+  if (!nuser.email || !nuser.password) {
+    return res.status(400).json({ msg: "Please enter a email and password" });
+  }
   const user = await User.findOne({ email: nuser.email });
   if (!user) {
-    res.status(404).json({ msg: "User not found" });
+    return res.status(404).json({ userNotFound: "User doesn't exists." });
   }
   const isCorrectPass = await bcrypt.compare(nuser.password, user.password);
-  if (!isCorrectPass) res.status(400).json({ msg: "Invalid password" });
+  if (!isCorrectPass) {
+    return res.status(401).json({ incorrectPass: "Invalid password" });
+  }
   const token = jwt.sign(
     { userId: user._id, name: user.name },
     process.env.JWT_SECRET,
