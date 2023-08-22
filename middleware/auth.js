@@ -1,9 +1,9 @@
 const jwt = require("jsonwebtoken");
 
-const auth = async (req, res) => {
+const auth = async (req, res, next) => {
   const authHeader = req.headers.authorization;
-
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    console.log("here");
     return res.status(401).json({ msg: "Authentication Invalid" });
   }
   const token = authHeader.split(" ")[1];
@@ -12,6 +12,7 @@ const auth = async (req, res) => {
     req.user = { userId: payload.userId, name: payload.name };
     next();
   } catch (err) {
+    console.log(err);
     return res.status(401).json({ msg: "Authentication Invalid" });
   }
 };

@@ -1,7 +1,6 @@
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-
 const register = async (req, res) => {
   const nuser = req.body;
 
@@ -15,7 +14,7 @@ const register = async (req, res) => {
     { userId: user._id, name: user.name },
     process.env.JWT_SECRET,
     {
-      expiresIn: process.env.JWT_LIFETIME,
+      expiresIn: "30d",
     }
   );
   res.status(200).json({ user: { name: user.name }, token });
